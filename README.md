@@ -8,6 +8,10 @@ A C# Winforms port of [Brainxyz's Artificial Life](https://www.youtube.com/watch
 >
 > – from the [original repository](https://github.com/hunar4321/life_code)
 
+Screenshot (C# Winforms)
+--------------------------------------------------------
+![](images/screenshot.png)
+
 ## Running the App
 
 1. Install [Visual Studio](https://visualstudio.microsoft.com/) if not already installed, and be sure to include the dependencies for .NET and desktop development.
