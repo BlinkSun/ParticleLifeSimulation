@@ -8,4 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="Accordion.cs~RF1527ad64.TMP" />
+    <None Remove="FrmMain.Designer.cs~RF151e018f.TMP" />
+  </ItemGroup>
+
 </Project>

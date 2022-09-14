@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Canvas = new Canvas();
+            this.Canvas = new ParticleLifeSimulation.Canvas();
+            this.PanelSettings = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // Canvas
             // 
+            this.Canvas.AutoSize = true;
             this.Canvas.BackColor = System.Drawing.Color.Black;
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Canvas.Location = new System.Drawing.Point(13, 13);
@@ -41,12 +43,21 @@
             this.Canvas.Size = new System.Drawing.Size(500, 500);
             this.Canvas.TabIndex = 0;
             // 
+            // PanelSettings
+            // 
+            this.PanelSettings.Dock = System.Windows.Forms.DockStyle.Right;
+            this.PanelSettings.Location = new System.Drawing.Point(526, 0);
+            this.PanelSettings.Name = "PanelSettings";
+            this.PanelSettings.Size = new System.Drawing.Size(204, 526);
+            this.PanelSettings.TabIndex = 1;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(731, 526);
+            this.ClientSize = new System.Drawing.Size(730, 526);
+            this.Controls.Add(this.PanelSettings);
             this.Controls.Add(this.Canvas);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -54,12 +65,15 @@
             this.MaximizeBox = false;
             this.Name = "FrmMain";
             this.Text = "FrmMain";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private Canvas Canvas;
+        private Panel PanelSettings;
     }
 }

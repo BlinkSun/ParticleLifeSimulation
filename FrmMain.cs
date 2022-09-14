@@ -16,34 +16,27 @@ namespace ParticleLifeSimulation
             Atom[] yellow = Create(200, Color.Yellow);
             Atom[] red = Create(200, Color.Red);
             Atom[] green = Create(200, Color.Green);
-            Atom[] blue = Create(200, Color.Blue);
 
             rules.AddRange(new Action[] {
                 () => Rule(green, green, -0.32),
                 () => Rule(green, red, -0.17),
                 () => Rule(green, yellow, 0.34),
-                () => Rule(green, blue, 0.21),
                 () => Rule(red, red, -0.1),
                 () => Rule(red, green, -0.34),
-                () => Rule(red, blue, -0.21),
                 () => Rule(yellow, yellow, 0.15),
                 () => Rule(yellow, green, -0.2),
-                () => Rule(yellow, blue, 0.2),
-                () => Rule(blue, blue, 0.15),
-                () => Rule(blue, green, -0.2),
-                () => Rule(blue, red, 0.2),
             });
 
             Canvas.OnPainting += (s, ev) =>
             {
                 ev.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 ev.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-                foreach (Action rule in rules) rule();
-                foreach (Atom atom in atoms) Draw(atom.x, atom.y, atom.color, 5, ev.Graphics);
+                rules.ForEach(action => action());
+                atoms.ForEach(atom => Draw(atom.x, atom.y, atom.color, 5, ev.Graphics));
             };
 
             Canvas.Interval = 15;
-            Canvas.Animated = true;
+            //Canvas.Animated = true;
         }
 
         private void Draw(double x, double y, Color c, double s, Graphics g)
@@ -91,6 +84,20 @@ namespace ParticleLifeSimulation
                 atoms.Add(group[i]);
             }
             return group;
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            //for(int i = 0; i < 3; i++)
+            //{
+            //    Accordion acc = new Accordion();
+            //    acc.Title(acc.Width.ToString());
+            //    acc.Add(new Label() { Text = "hello1" });
+            //    acc.Add(new Label() { Text = "hello2" });
+            //    acc.Add(new Label() { Text = "hello3" });
+            //    acc.Add(new Label() { Text = "hello4" });
+            //    PanelSettings.Controls.Add(acc);
+            //}
         }
     }
 
