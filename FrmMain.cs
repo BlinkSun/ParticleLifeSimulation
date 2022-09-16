@@ -2,7 +2,10 @@ namespace ParticleLifeSimulation;
 
 public partial class FrmMain : Form
 {
-    private readonly double CANVAS_SIZE = 400; // 500 - (2*50)
+    private readonly double CANVAS = 500;
+    private readonly double DIAMETER = 5.0;
+
+    private bool wrap = true;
 
     private List<Atom> atoms;
     private List<Action> rules;
@@ -32,7 +35,7 @@ public partial class FrmMain : Form
             ev.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             ev.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
             rules.ForEach(action => action());
-            atoms.ForEach(atom => Draw(atom.x, atom.y, atom.color, 5, ev.Graphics));
+            atoms.ForEach(atom => Draw(atom.x, atom.y, atom.color, this.DIAMETER, ev.Graphics));
         };
 
         Canvas.Interval = 15;
@@ -56,6 +59,28 @@ public partial class FrmMain : Form
                 Atom b = atoms2[j];
                 double dx = a.x - b.x;
                 double dy = a.y - b.y;
+
+                if (this.wrap)
+                {
+                    if (dx > this.CANVAS * 0.5)
+                    {
+                        dx -= this.CANVAS;
+                    }
+                    else if (dx < -this.CANVAS * 0.5)
+                    {
+                        dx += this.CANVAS;
+                    }
+
+                    if (dy > this.CANVAS * 0.5)
+                    {
+                        dy -= this.CANVAS;
+                    }
+                    else if (dy < -this.CANVAS * 0.5)
+                    {
+                        dy += this.CANVAS;
+                    }
+                }
+
                 double d = Math.Sqrt(dx * dx + dy * dy);
                 if (d > 0 && d < 80)
                 {
@@ -68,12 +93,55 @@ public partial class FrmMain : Form
             a.vy = (a.vy + fy) * 0.5;
             a.x += a.vx;
             a.y += a.vy;
-            if (a.x <= 0 || a.x >= 500) { a.vx *= -1; }
-            if (a.y <= 0 || a.y >= 500) { a.vy *= -1; }
+
+            if (this.wrap)
+            {
+                if (a.x < 0)
+                {
+                    a.x += this.CANVAS;
+                }
+                else if (a.x >= this.CANVAS)
+                {
+                    a.x -= this.CANVAS;
+                }
+
+                if (a.y < 0)
+                {
+                    a.y += this.CANVAS;
+                }
+                else if (a.y >= this.CANVAS)
+                {
+                    a.y -= this.CANVAS;
+                }
+            }
+            else
+            {
+                if (a.x < this.DIAMETER)
+                {
+                    a.vx = -a.vx;
+                    a.x = this.DIAMETER;
+                }
+                else if (a.x >= this.CANVAS - this.DIAMETER)
+                {
+                    a.vx = -a.vx;
+                    a.x = this.CANVAS - this.DIAMETER;
+                }
+
+                if (a.y < this.DIAMETER)
+                {
+                    a.vy = -a.vy;
+                    a.y = this.DIAMETER;
+                }
+                else if (a.y >= this.CANVAS - this.DIAMETER)
+                {
+                    a.vy = -a.vy;
+                    a.y = this.CANVAS - this.DIAMETER;
+                }
+            }
         }
     }
 
-    private double Randomxy() => Random.Shared.NextDouble() * CANVAS_SIZE + 50;
+    private double Randomxy() => Random.Shared.NextDouble() * (this.CANVAS - 2 * 50) + 50;
     
     private Atom[] Create(int number, Color color)
     {
@@ -110,15 +178,6 @@ public partial class FrmMain : Form
         FlowLayoutPanel panel = (FlowLayoutPanel)sender;
         e.Control.Width = panel.ClientSize.Width - e.Control.Margin.Left - e.Control.Margin.Right;
     }
-    //private void PanelSettings_Layout(object sender, LayoutEventArgs e)
-    //{
-    //    FlowLayoutPanel panel = (FlowLayoutPanel)sender;
-    //    if (e != null && e.AffectedControl != null)
-    //    {
-    //        Control control = e.AffectedControl;
-    //        control.Width = panel.ClientSize.Width - control.Margin.Left - control.Margin.Right;
-    //    }
-    //}
     #endregion
 
 }
