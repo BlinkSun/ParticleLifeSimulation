@@ -48,10 +48,10 @@ partial class FrmMain
             this.PanelSettings.AutoScroll = true;
             this.PanelSettings.Dock = System.Windows.Forms.DockStyle.Right;
             this.PanelSettings.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.PanelSettings.Location = new System.Drawing.Point(500, 0);
+            this.PanelSettings.Location = new System.Drawing.Point(504, 0);
             this.PanelSettings.Margin = new System.Windows.Forms.Padding(0);
             this.PanelSettings.Name = "PanelSettings";
-            this.PanelSettings.Size = new System.Drawing.Size(200, 497);
+            this.PanelSettings.Size = new System.Drawing.Size(298, 497);
             this.PanelSettings.TabIndex = 1;
             this.PanelSettings.WrapContents = false;
             this.PanelSettings.SizeChanged += new System.EventHandler(this.PanelSettings_SizeChanged);
@@ -62,7 +62,7 @@ partial class FrmMain
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(700, 497);
+            this.ClientSize = new System.Drawing.Size(802, 497);
             this.Controls.Add(this.PanelSettings);
             this.Controls.Add(this.Canvas);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);

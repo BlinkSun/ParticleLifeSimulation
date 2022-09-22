@@ -1,169 +1,161 @@
+using System.Reflection;
+
 namespace ParticleLifeSimulation;
 
 public partial class FrmMain : Form
 {
-    private readonly double CANVAS = 500;
-    private readonly double DIAMETER = 5.0;
-
-    private bool wrap = true;
-
-    private List<Atom> atoms;
-    private List<Action> rules;
+    private Simulation simulation;
 
     public FrmMain()
     {
         InitializeComponent();
-        atoms = new List<Atom>();
-        rules = new List<Action>();
 
-        Atom[] yellow = Create(200, Color.Yellow);
-        Atom[] red = Create(200, Color.Red);
-        Atom[] green = Create(200, Color.Green);
+        simulation = new Simulation(500.0, 500.0, true);
+        simulation.AtomAdded += new EventHandler<AtomEventArgs>(Simulation_AtomAdded);
 
-        rules.AddRange(new Action[] {
-            () => Rule(green, green, -0.32),
-            () => Rule(green, red, -0.17),
-            () => Rule(green, yellow, 0.34),
-            () => Rule(red, red, -0.1),
-            () => Rule(red, green, -0.34),
-            () => Rule(yellow, yellow, 0.15),
-            () => Rule(yellow, green, -0.2),
-        });
-
-        Canvas.OnPainting += (s, ev) =>
+        for (int i = 0; i < 4; i++)
         {
-            ev.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            ev.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-            rules.ForEach(action => action());
-            atoms.ForEach(atom => Draw(atom.x, atom.y, atom.color, this.DIAMETER, ev.Graphics));
+            Color randColor = GetRandomKnownColor();
+            while (simulation.IsAtomExist(randColor.Name)) randColor = GetRandomKnownColor();
+            simulation.AddAtom($"{randColor.Name}", 200, randColor, 2.5);
+        }
+
+        //simulation.AddAtom("Greeeeeens", 200, Color.Green, 1.5);
+        //simulation.AddAtom("Reeeeeeeeds", 200, Color.Red, 1.5);
+
+        Canvas.OnPainting += (s, pev) =>
+        {
+            pev.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            pev.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+            simulation.Step();
+            simulation.Draw(pev.Graphics);
         };
 
         Canvas.Interval = 15;
         Canvas.Animated = true;
     }
 
-    private void Draw(double x, double y, Color c, double s, Graphics g)
+    private void Simulation_AtomAdded(object? sender, AtomEventArgs e)
     {
-        g.FillEllipse(new SolidBrush(c), (float)x, (float)y, (float)s, (float)s);
-    }
+        Atom atom = e.Atom;
+        Accordion accordion = new();
+        accordion.Title($"{atom.Name}");
 
-    private void Rule(Atom[] atoms1, Atom[] atoms2, double g)
-    {
-        for (int i = 0; i < atoms1.Length; i++)
+        Slider sldNumber = new() { MinValue = 1.0, MaxValue = 1000.0, CurrentValue = atom.Number };
+        sldNumber.SetText("Number");
+        sldNumber.OnValueChanged += new((s,ev) => atom.Number = Convert.ToInt32(sldNumber.CurrentValue));
+        accordion.Add(sldNumber);
+
+        Slider sldRadius = new() { MinValue = 1.0, MaxValue = 10.0, CurrentValue = atom.Radius, ValueFormat = "F1" };
+        sldRadius.SetText("Radius");
+        sldRadius.OnValueChanged += new((s,ev) => atom.Radius = Convert.ToInt32(sldRadius.CurrentValue));
+        accordion.Add(sldRadius);
+
+        Label lblForces = new() { Text = "Forces :" };
+        accordion.Add(lblForces);
+
+        foreach (KeyValuePair<string, Force> keyValuePair in atom.Forces)
         {
-            Atom a = atoms1[i];
-            double fx = 0;
-            double fy = 0;
-            for (int j = 0; j < atoms2.Length; j++)
-            {
-                Atom b = atoms2[j];
-                double dx = a.x - b.x;
-                double dy = a.y - b.y;
-
-                if (this.wrap)
-                {
-                    if (dx > this.CANVAS * 0.5)
-                    {
-                        dx -= this.CANVAS;
-                    }
-                    else if (dx < -this.CANVAS * 0.5)
-                    {
-                        dx += this.CANVAS;
-                    }
-
-                    if (dy > this.CANVAS * 0.5)
-                    {
-                        dy -= this.CANVAS;
-                    }
-                    else if (dy < -this.CANVAS * 0.5)
-                    {
-                        dy += this.CANVAS;
-                    }
-                }
-
-                double d = Math.Sqrt(dx * dx + dy * dy);
-                if (d > 0 && d < 80)
-                {
-                    double F = (g * 1) / d;
-                    fx += F * dx;
-                    fy += F * dy;
-                }
-            }
-            a.vx = (a.vx + fx) * 0.5;
-            a.vy = (a.vy + fy) * 0.5;
-            a.x += a.vx;
-            a.y += a.vy;
-
-            if (this.wrap)
-            {
-                if (a.x < 0)
-                {
-                    a.x += this.CANVAS;
-                }
-                else if (a.x >= this.CANVAS)
-                {
-                    a.x -= this.CANVAS;
-                }
-
-                if (a.y < 0)
-                {
-                    a.y += this.CANVAS;
-                }
-                else if (a.y >= this.CANVAS)
-                {
-                    a.y -= this.CANVAS;
-                }
-            }
-            else
-            {
-                if (a.x < this.DIAMETER)
-                {
-                    a.vx = -a.vx;
-                    a.x = this.DIAMETER;
-                }
-                else if (a.x >= this.CANVAS - this.DIAMETER)
-                {
-                    a.vx = -a.vx;
-                    a.x = this.CANVAS - this.DIAMETER;
-                }
-
-                if (a.y < this.DIAMETER)
-                {
-                    a.vy = -a.vy;
-                    a.y = this.DIAMETER;
-                }
-                else if (a.y >= this.CANVAS - this.DIAMETER)
-                {
-                    a.vy = -a.vy;
-                    a.y = this.CANVAS - this.DIAMETER;
-                }
-            }
+            Force force = keyValuePair.Value;
+            Slider sldForce = new() { MinValue = -1.0, MaxValue = 1.0, CurrentValue = force.Value, ValueFormat = "F2" };
+            sldForce.SetText($"{force.Name}");
+            sldForce.OnValueChanged += new((s,ev) => force.Value = sldForce.CurrentValue);
+            accordion.Add(sldForce);
         }
+
+        PanelSettings.Controls.Add(accordion);
     }
 
-    private double Randomxy() => Random.Shared.NextDouble() * (this.CANVAS - 2 * 50) + 50;
-    
-    private Atom[] Create(int number, Color color)
+    private void FrmMain_Load(object sender, EventArgs e)
     {
-        Atom[] group = new Atom[number];
-        for (int i = 0; i < number; i++)
-        {
-            group[i] = new Atom(Randomxy(), Randomxy(), color);
-            atoms.Add(group[i]);
-        }
-        return group;
+        CreateGlobalsSettings();
     }
-
-    private void FrmMain_Load(object sender, EventArgs e) => PopulatePanelSettings();
 
     #region PanelSettings
+    private void CreateGlobalsSettings()
+    {
+        // Settings Globals
+        Accordion accSettings = new Accordion();
+        accSettings.Title("Settings");
+        // Start/Reset button
+        Button btn = new Button() { Text = "START/RESET", UseVisualStyleBackColor = true };
+        btn.Click += new EventHandler((s,e) => simulation.ResetAllParticles());
+        accSettings.Add(btn);
+        //Wrap/Bounded
+        CheckBox chk1 = new CheckBox() { Text = "Wrap", Checked = simulation.Wrap };
+        chk1.CheckedChanged += new EventHandler((s,e) => simulation.Wrap = chk1.Checked);
+        accSettings.Add(chk1);
+        //Contrast
+        CheckBox chk2 = new CheckBox() { Text = "Contrast", Checked = simulation.Contrast };
+        chk2.CheckedChanged += new EventHandler((s,e) => simulation.Contrast = chk2.Checked);
+        accSettings.Add(chk2);
+
+        PanelSettings.Controls.Add(accSettings);
+    }
     private void PopulatePanelSettings()
     {
-        Accordion acc = new Accordion();
-        acc.Title("Settings");
-        acc.Add(new Button() { Text = "START/RESET" });
-        acc.Add(new CheckBox() { Text = "Bounded", Checked = false});
-        PanelSettings.Controls.Add(acc);
+        // GREENS
+        Accordion accGREENS = new();
+        accGREENS.Title("GREENS =>");
+        Slider sldGREENSNumber = new() { MinValue = 1.0, MaxValue = 1000.0, CurrentValue = 500.0 };
+        sldGREENSNumber.SetText("Number");
+        sldGREENSNumber.OnValueChanged += new(Sliders_ValueChanged);
+        accGREENS.Add(sldGREENSNumber);
+
+        Slider sldGREENSGREENS = new() { MinValue = -1.0, MaxValue = 1.0, CurrentValue = 0.0, ValueFormat = "F2" };
+        sldGREENSGREENS.SetText("greens -> greens");
+        sldGREENSGREENS.OnValueChanged += new(Sliders_ValueChanged);
+        accGREENS.Add(sldGREENSGREENS);
+
+        Slider sldGREENSREDS = new() { MinValue = -1.0, MaxValue = 1.0, CurrentValue = 0.0, ValueFormat = "F2" };
+        sldGREENSREDS.SetText("greens -> reds");
+        sldGREENSREDS.OnValueChanged += new(Sliders_ValueChanged);
+        accGREENS.Add(sldGREENSREDS);
+
+        Slider sldGREENSYELLOWS = new() { MinValue = -1.0, MaxValue = 1.0, CurrentValue = 0.0, ValueFormat = "F2" };
+        sldGREENSYELLOWS.SetText("greens -> yellows");
+        sldGREENSYELLOWS.OnValueChanged += new(Sliders_ValueChanged);
+        accGREENS.Add(sldGREENSYELLOWS);
+
+        Slider sldGREENSBLUES = new() { MinValue = -1.0, MaxValue = 1.0, CurrentValue = 0.0, ValueFormat = "F2" };
+        sldGREENSBLUES.SetText("greens -> blues");
+        sldGREENSBLUES.OnValueChanged += new(Sliders_ValueChanged);
+        accGREENS.Add(sldGREENSBLUES);
+
+        PanelSettings.Controls.Add(accGREENS);
+
+        // REDS
+        Accordion accREDS = new Accordion();
+        accREDS.Title("REDS =>");
+        Slider sldREDSNumber = new Slider() { MinValue = 1.0, MaxValue = 1000.0, CurrentValue = 500.0 };
+        sldREDSNumber.SetText("Number");
+        sldREDSNumber.OnValueChanged += new EventHandler(Sliders_ValueChanged);
+        accREDS.Add(sldREDSNumber);
+        PanelSettings.Controls.Add(accREDS);
+
+        // YELLOWS
+        Accordion accYELLOWS = new Accordion();
+        accYELLOWS.Title("YELLOWS =>");
+        Slider sldYELLOWSNumber = new Slider() { MinValue = 1.0, MaxValue = 1000.0, CurrentValue = 500.0 };
+        sldYELLOWSNumber.SetText("Number");
+        sldYELLOWSNumber.OnValueChanged += new EventHandler(Sliders_ValueChanged);
+        accYELLOWS.Add(sldYELLOWSNumber);
+        PanelSettings.Controls.Add(accYELLOWS);
+
+        // BLUES
+        Accordion accBLUES = new Accordion();
+        accBLUES.Title("BLUES =>");
+        Slider sldBLUESNumber = new Slider() { MinValue = 1.0, MaxValue = 1000.0, CurrentValue = 500.0 };
+        sldBLUESNumber.SetText("Number");
+        sldBLUESNumber.OnValueChanged += new EventHandler(Sliders_ValueChanged);
+        accBLUES.Add(sldBLUESNumber);
+        PanelSettings.Controls.Add(accBLUES);
+    }
+    private void Sliders_ValueChanged(object? sender, EventArgs e)
+    {
+        Slider sld = (Slider)sender!;
+        double value = sld.CurrentValue;
+        //GenerateAtomsAndRules();
     }
     private void PanelSettings_SizeChanged(object sender, EventArgs e)
     {
@@ -180,4 +172,11 @@ public partial class FrmMain : Form
     }
     #endregion
 
+    private static Color GetRandomKnownColor()
+    {
+        List<Color> names = ((KnownColor[])Enum.GetValues(typeof(KnownColor))).Select(c => Color.FromKnownColor(c)).ToList();
+        string[] systemColorNames = typeof(SystemColors).GetRuntimeProperties().Select(c => c.Name).ToArray();
+        names.RemoveAll(c => systemColorNames.Contains(c.Name) || c.Name.Count(c => char.IsUpper(c)) > 1 || c.Name == "Transparent");
+        return names[Random.Shared.Next(names.Count)];
+    }
 }

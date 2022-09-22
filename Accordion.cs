@@ -8,54 +8,66 @@ public partial class Accordion : UserControl
     public Accordion()
     {
         InitializeComponent();
-        this.Height = ChkTitleBar.Height;
     }
 
     private void Accordion_Load(object sender, EventArgs e)
     {
-        ReSize();
+        ToggleResize();
     }
 
-    private void ReSize()
+    private void ToggleResize()
     {
-        if (ChkTitleBar.Checked)
+        if (this.ChkTitleBar.Checked)
         {
             int height = 0;
-            foreach (Control control in PanelControles.Controls)
+            foreach (Control control in this.PanelControles.Controls)
             {
                 height += control.Height;
+                control.Left = control.Margin.Left;
             }
-            this.Height = ChkTitleBar.Height + height;// + defaultHeight;
+            this.Height = this.ChkTitleBar.Height + height;
+            this.ChkTitleBar.Image = Properties.Resources.arrow_bottom.ToBitmap();
             OnOpened?.Invoke(this, new EventArgs());
         }
         else
         {
-            this.Height = ChkTitleBar.Height;
+            this.Height = this.ChkTitleBar.Height;
+            this.ChkTitleBar.Image = Properties.Resources.arrow_right.ToBitmap();
             OnClosed?.Invoke(this, new EventArgs());
         }
     }
 
     private void ChkTitleBar_CheckedChanged(object sender, EventArgs e)
     {
-        ReSize();
+        ToggleResize();
     }
 
     public void Add(Control ctrl)
     {
         int top = 0;
-        foreach (Control control in PanelControles.Controls) top += control.Height;
+        foreach (Control control in this.PanelControles.Controls)
+            top += control.Height;
         ctrl.Top = top;
-        PanelControles.Controls.Add(ctrl);
-        ReSize();
+        this.PanelControles.Controls.Add(ctrl);
+        ToggleResize();
     }
 
     public void Clear()
     {
-        PanelControles.Controls.Clear();
+        this.PanelControles.Controls.Clear();
+        ToggleResize();
     }
 
     public void Title(string title)
     {
-        ChkTitleBar.Text = title;
+        this.ChkTitleBar.Text = title;
+    }
+
+    private void Accordion_SizeChanged(object sender, EventArgs e)
+    {
+        this.SuspendLayout();
+        foreach (Control control in this.PanelControles.Controls)
+            control.Width = this.ClientSize.Width - control.Margin.Left - control.Margin.Right;
+        this.ResumeLayout();
     }
 }

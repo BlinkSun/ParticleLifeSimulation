@@ -39,11 +39,13 @@ namespace ParticleLifeSimulation
             this.ChkTitleBar.Appearance = System.Windows.Forms.Appearance.Button;
             this.ChkTitleBar.AutoSize = true;
             this.ChkTitleBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ChkTitleBar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.ChkTitleBar.Location = new System.Drawing.Point(0, 0);
             this.ChkTitleBar.Name = "ChkTitleBar";
             this.ChkTitleBar.Size = new System.Drawing.Size(207, 25);
             this.ChkTitleBar.TabIndex = 0;
             this.ChkTitleBar.Text = "AccTitle";
+            this.ChkTitleBar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.ChkTitleBar.UseVisualStyleBackColor = true;
             this.ChkTitleBar.CheckedChanged += new System.EventHandler(this.ChkTitleBar_CheckedChanged);
             // 
@@ -64,6 +66,7 @@ namespace ParticleLifeSimulation
             this.Name = "Accordion";
             this.Size = new System.Drawing.Size(207, 316);
             this.Load += new System.EventHandler(this.Accordion_Load);
+            this.SizeChanged += new System.EventHandler(this.Accordion_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
