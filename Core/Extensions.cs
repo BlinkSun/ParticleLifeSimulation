@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ParticleLifeSimulation.Core2
+namespace ParticleLifeSimulation.Core
 {
     public static class Extensions
     {

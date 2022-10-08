@@ -1,4 +1,4 @@
-﻿namespace ParticleLifeSimulation.Core2
+﻿namespace ParticleLifeSimulation.Core
 {
     public class Atom
     {

@@ -1,7 +1,7 @@
 using CustomControls;
-using ParticleLifeSimulation.Core2;
+using ParticleLifeSimulation.Core;
 using ParticleLifeSimulation.Properties;
-using static ParticleLifeSimulation.Core2.Extensions;
+using static ParticleLifeSimulation.Core.Extensions;
 
 namespace ParticleLifeSimulation;
 
