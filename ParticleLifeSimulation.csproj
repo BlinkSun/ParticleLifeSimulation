@@ -6,15 +6,31 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AviFile\AudioStream.cs" />
+    <Compile Remove="AviFile\Avi.cs" />
+    <Compile Remove="AviFile\AviManager.cs" />
+    <Compile Remove="AviFile\AviPlayer.cs" />
+    <Compile Remove="AviFile\AviStream.cs" />
+    <Compile Remove="AviFile\EditableVideoStream.cs" />
+    <Compile Remove="AviFile\VideoStream.cs" />
+    <Compile Remove="FrmMandlebrot.cs" />
+    <Compile Remove="FrmMandlebrot.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="FrmMandlebrot.resx" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CustomControls\CustomControls.csproj" />
+    <None Remove="FrmUniverse.cs~RFaa32d2bc.TMP" />
+    <None Remove="FrmUniverse.cs~RFb05e3fde.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +38,12 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="UserControls\Canvas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UserControls\Slider.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
 

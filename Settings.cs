@@ -37,18 +37,18 @@ namespace ParticleLifeSimulation
 
         [UserScopedSetting]
         [DefaultSettingValue("")]
-        public string CanvasBackgroundImage
+        public string CanvasBackgroundBitmap
         {
-            get => (string)this[nameof(CanvasBackgroundImage)];
-            set => this[nameof(CanvasBackgroundImage)] = value;
+            get => (string)this[nameof(CanvasBackgroundBitmap)];
+            set => this[nameof(CanvasBackgroundBitmap)] = value;
         }
 
         [UserScopedSetting]
-        [DefaultSettingValue("15")]   // 15 ~ (1000 millisecs / 60 frames)
-        public int CanvasInterval
+        [DefaultSettingValue("1")]
+        public int CanvasStepsPerFrame
         {
-            get => (int)this[nameof(CanvasInterval)];
-            set => this[nameof(CanvasInterval)] = value;
+            get => (int)this[nameof(CanvasStepsPerFrame)];
+            set => this[nameof(CanvasStepsPerFrame)] = value;
         }
 
         [UserScopedSetting]
@@ -57,6 +57,22 @@ namespace ParticleLifeSimulation
         {
             get => (bool)this[nameof(CanvasAnimated)];
             set => this[nameof(CanvasAnimated)] = value;
+        }
+
+        [UserScopedSetting]
+        [DefaultSettingValue("false")]
+        public bool ParticlesContraste
+        {
+            get => (bool)this[nameof(ParticlesContraste)];
+            set => this[nameof(ParticlesContraste)] = value;
+        }
+
+        [UserScopedSetting]
+        [DefaultSettingValue("false")]
+        public bool ParticlesBorder
+        {
+            get => (bool)this[nameof(ParticlesBorder)];
+            set => this[nameof(ParticlesBorder)] = value;
         }
     }
 }

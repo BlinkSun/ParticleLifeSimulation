@@ -19,7 +19,7 @@ namespace ParticleLifeSimulation.Core
         /// </summary>
         /// <param name="atom">The atom to clone.</param>
         /// <returns>Clone of atom.</returns>
-        public static Atom ToClone(this Atom atom) => new(atom.Name, atom.Color, atom.MaxWidth, atom.MaxHeight);
+        public static Atom ToClone(this Atom atom) => new(atom.Name, atom.Color, atom.MaxWidth, atom.MaxHeight, atom.Radius);
         #endregion
 
         #region Force        
@@ -28,7 +28,7 @@ namespace ParticleLifeSimulation.Core
         /// </summary>
         /// <param name="force">The force to clone.</param>
         /// <returns>Clone of force.</returns>
-        public static Force ToClone(this Force force) => new(force.Name, force.AtomTarget, force.Value, force.Random);
+        public static Force ToClone(this Force force) => new(force.AtomTarget, force.Value);
         #endregion
 
         #region Random        

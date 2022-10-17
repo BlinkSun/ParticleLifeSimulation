@@ -1,4 +1,6 @@
-﻿namespace ParticleLifeSimulation;
+﻿using ParticleLifeSimulation.UserControls;
+
+namespace ParticleLifeSimulation;
 
 partial class FrmUniverse
 {
@@ -28,72 +30,137 @@ partial class FrmUniverse
     /// </summary>
     private void InitializeComponent()
     {
-            this.Canvas = new CustomControls.Canvas();
             this.PanelSettings = new System.Windows.Forms.FlowLayoutPanel();
-            this.SplitCanvasSettings = new System.Windows.Forms.SplitContainer();
-            ((System.ComponentModel.ISupportInitialize)(this.SplitCanvasSettings)).BeginInit();
-            this.SplitCanvasSettings.Panel1.SuspendLayout();
-            this.SplitCanvasSettings.Panel2.SuspendLayout();
-            this.SplitCanvasSettings.SuspendLayout();
+            this.RightDocker = new System.Windows.Forms.Panel();
+            this.TogglePanel = new System.Windows.Forms.CheckBox();
+            this.StatusToolStripStats = new System.Windows.Forms.StatusStrip();
+            this.ToolStripTotalParticles = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ToolStripStatsTotalParticles = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ToolStripStatsSpace = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ToolStripFPS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ToolStripStatsFPS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.RightDocker.SuspendLayout();
+            this.StatusToolStripStats.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Canvas
-            // 
-            this.Canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Canvas.Location = new System.Drawing.Point(0, 0);
-            this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(648, 501);
-            this.Canvas.TabIndex = 0;
             // 
             // PanelSettings
             // 
             this.PanelSettings.AllowDrop = true;
             this.PanelSettings.AutoSize = true;
+            this.PanelSettings.BackColor = System.Drawing.Color.Transparent;
             this.PanelSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.PanelSettings.Location = new System.Drawing.Point(0, 0);
             this.PanelSettings.Name = "PanelSettings";
-            this.PanelSettings.Size = new System.Drawing.Size(152, 0);
+            this.PanelSettings.Size = new System.Drawing.Size(200, 0);
+            this.PanelSettings.TabIndex = 1;
             // 
-            // SplitCanvasSettings
+            // RightDocker
             // 
-            this.SplitCanvasSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitCanvasSettings.Location = new System.Drawing.Point(0, 0);
-            this.SplitCanvasSettings.Name = "SplitCanvasSettings";
+            this.RightDocker.AutoScroll = true;
+            this.RightDocker.BackColor = System.Drawing.Color.Transparent;
+            this.RightDocker.Controls.Add(this.PanelSettings);
+            this.RightDocker.Dock = System.Windows.Forms.DockStyle.Right;
+            this.RightDocker.Location = new System.Drawing.Point(600, 0);
+            this.RightDocker.Name = "RightDocker";
+            this.RightDocker.Size = new System.Drawing.Size(200, 476);
+            this.RightDocker.TabIndex = 2;
             // 
-            // SplitCanvasSettings.Panel1
+            // TogglePanel
             // 
-            this.SplitCanvasSettings.Panel1.Controls.Add(this.Canvas);
+            this.TogglePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TogglePanel.Appearance = System.Windows.Forms.Appearance.Button;
+            this.TogglePanel.AutoSize = true;
+            this.TogglePanel.Location = new System.Drawing.Point(575, 3);
+            this.TogglePanel.Name = "TogglePanel";
+            this.TogglePanel.Size = new System.Drawing.Size(25, 25);
+            this.TogglePanel.TabIndex = 3;
+            this.TogglePanel.Text = ">";
+            this.TogglePanel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TogglePanel.UseVisualStyleBackColor = true;
             // 
-            // SplitCanvasSettings.Panel2
+            // StatusToolStripStats
             // 
-            this.SplitCanvasSettings.Panel2.AutoScroll = true;
-            this.SplitCanvasSettings.Panel2.Controls.Add(this.PanelSettings);
-            this.SplitCanvasSettings.Size = new System.Drawing.Size(804, 501);
-            this.SplitCanvasSettings.SplitterDistance = 648;
-            this.SplitCanvasSettings.TabIndex = 0;
+            this.StatusToolStripStats.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripTotalParticles,
+            this.ToolStripStatsTotalParticles,
+            this.ToolStripStatsSpace,
+            this.ToolStripFPS,
+            this.ToolStripStatsFPS});
+            this.StatusToolStripStats.Location = new System.Drawing.Point(0, 476);
+            this.StatusToolStripStats.Name = "StatusToolStripStats";
+            this.StatusToolStripStats.Size = new System.Drawing.Size(800, 24);
+            this.StatusToolStripStats.TabIndex = 4;
+            this.StatusToolStripStats.Text = "statusStrip1";
+            // 
+            // ToolStripTotalParticles
+            // 
+            this.ToolStripTotalParticles.BackColor = System.Drawing.SystemColors.Control;
+            this.ToolStripTotalParticles.Name = "ToolStripTotalParticles";
+            this.ToolStripTotalParticles.Size = new System.Drawing.Size(85, 19);
+            this.ToolStripTotalParticles.Text = "Total Particles :";
+            // 
+            // ToolStripStatsTotalParticles
+            // 
+            this.ToolStripStatsTotalParticles.BackColor = System.Drawing.SystemColors.Control;
+            this.ToolStripStatsTotalParticles.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.ToolStripStatsTotalParticles.Name = "ToolStripStatsTotalParticles";
+            this.ToolStripStatsTotalParticles.Size = new System.Drawing.Size(17, 19);
+            this.ToolStripStatsTotalParticles.Text = "0";
+            // 
+            // ToolStripStatsSpace
+            // 
+            this.ToolStripStatsSpace.BackColor = System.Drawing.SystemColors.Control;
+            this.ToolStripStatsSpace.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
+            this.ToolStripStatsSpace.Name = "ToolStripStatsSpace";
+            this.ToolStripStatsSpace.Size = new System.Drawing.Size(603, 19);
+            this.ToolStripStatsSpace.Spring = true;
+            // 
+            // ToolStripFPS
+            // 
+            this.ToolStripFPS.BackColor = System.Drawing.SystemColors.Control;
+            this.ToolStripFPS.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.ToolStripFPS.Name = "ToolStripFPS";
+            this.ToolStripFPS.Size = new System.Drawing.Size(36, 19);
+            this.ToolStripFPS.Text = "FPS :";
+            // 
+            // ToolStripStatsFPS
+            // 
+            this.ToolStripStatsFPS.BackColor = System.Drawing.SystemColors.Control;
+            this.ToolStripStatsFPS.Name = "ToolStripStatsFPS";
+            this.ToolStripStatsFPS.Size = new System.Drawing.Size(13, 19);
+            this.ToolStripStatsFPS.Text = "0";
             // 
             // FrmUniverse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 501);
-            this.Controls.Add(this.SplitCanvasSettings);
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.TogglePanel);
+            this.Controls.Add(this.RightDocker);
+            this.Controls.Add(this.StatusToolStripStats);
+            this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmUniverse";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Universe";
-            this.SplitCanvasSettings.Panel1.ResumeLayout(false);
-            this.SplitCanvasSettings.Panel2.ResumeLayout(false);
-            this.SplitCanvasSettings.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SplitCanvasSettings)).EndInit();
-            this.SplitCanvasSettings.ResumeLayout(false);
+            this.RightDocker.ResumeLayout(false);
+            this.RightDocker.PerformLayout();
+            this.StatusToolStripStats.ResumeLayout(false);
+            this.StatusToolStripStats.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
     }
 
     #endregion
-
-    private CustomControls.Canvas Canvas;
     private FlowLayoutPanel PanelSettings;
-    private SplitContainer SplitCanvasSettings;
+    private Panel RightDocker;
+    private CheckBox TogglePanel;
+    private StatusStrip StatusToolStripStats;
+    private ToolStripStatusLabel ToolStripTotalParticles;
+    private ToolStripStatusLabel ToolStripStatsTotalParticles;
+    private ToolStripStatusLabel ToolStripStatsSpace;
+    private ToolStripStatusLabel ToolStripFPS;
+    private ToolStripStatusLabel ToolStripStatsFPS;
 }

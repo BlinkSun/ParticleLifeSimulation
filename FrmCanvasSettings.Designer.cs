@@ -38,14 +38,14 @@
             this.TxtFilename = new System.Windows.Forms.TextBox();
             this.PicColor = new System.Windows.Forms.PictureBox();
             this.GrpAnimation = new System.Windows.Forms.GroupBox();
-            this.LblIntervalPerFrame = new System.Windows.Forms.Label();
-            this.LblInterval = new System.Windows.Forms.Label();
-            this.NumInterval = new System.Windows.Forms.NumericUpDown();
+            this.LblStepsByFrame = new System.Windows.Forms.Label();
+            this.LblSteps = new System.Windows.Forms.Label();
+            this.NumStepsByFrame = new System.Windows.Forms.NumericUpDown();
             this.ChkAnimated = new System.Windows.Forms.CheckBox();
             this.GrpBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PicColor)).BeginInit();
             this.GrpAnimation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumStepsByFrame)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnOk
@@ -144,9 +144,9 @@
             // 
             // GrpAnimation
             // 
-            this.GrpAnimation.Controls.Add(this.LblIntervalPerFrame);
-            this.GrpAnimation.Controls.Add(this.LblInterval);
-            this.GrpAnimation.Controls.Add(this.NumInterval);
+            this.GrpAnimation.Controls.Add(this.LblStepsByFrame);
+            this.GrpAnimation.Controls.Add(this.LblSteps);
+            this.GrpAnimation.Controls.Add(this.NumStepsByFrame);
             this.GrpAnimation.Controls.Add(this.ChkAnimated);
             this.GrpAnimation.Location = new System.Drawing.Point(12, 112);
             this.GrpAnimation.Name = "GrpAnimation";
@@ -155,41 +155,41 @@
             this.GrpAnimation.TabStop = false;
             this.GrpAnimation.Text = "Animation";
             // 
-            // LblIntervalPerFrame
+            // LblStepsByFrame
             // 
-            this.LblIntervalPerFrame.AutoSize = true;
-            this.LblIntervalPerFrame.Location = new System.Drawing.Point(331, 23);
-            this.LblIntervalPerFrame.Name = "LblIntervalPerFrame";
-            this.LblIntervalPerFrame.Size = new System.Drawing.Size(115, 15);
-            this.LblIntervalPerFrame.TabIndex = 3;
-            this.LblIntervalPerFrame.Text = "milliseconds / frame";
+            this.LblStepsByFrame.AutoSize = true;
+            this.LblStepsByFrame.Location = new System.Drawing.Point(331, 23);
+            this.LblStepsByFrame.Name = "LblStepsByFrame";
+            this.LblStepsByFrame.Size = new System.Drawing.Size(76, 15);
+            this.LblStepsByFrame.TabIndex = 3;
+            this.LblStepsByFrame.Text = "steps / frame";
             // 
-            // LblInterval
+            // LblSteps
             // 
-            this.LblInterval.AutoSize = true;
-            this.LblInterval.Location = new System.Drawing.Point(212, 23);
-            this.LblInterval.Name = "LblInterval";
-            this.LblInterval.Size = new System.Drawing.Size(52, 15);
-            this.LblInterval.TabIndex = 2;
-            this.LblInterval.Text = "Interval :";
+            this.LblSteps.AutoSize = true;
+            this.LblSteps.Location = new System.Drawing.Point(223, 23);
+            this.LblSteps.Name = "LblSteps";
+            this.LblSteps.Size = new System.Drawing.Size(41, 15);
+            this.LblSteps.TabIndex = 2;
+            this.LblSteps.Text = "Steps :";
             // 
-            // NumInterval
+            // NumStepsByFrame
             // 
-            this.NumInterval.Location = new System.Drawing.Point(270, 19);
-            this.NumInterval.Maximum = new decimal(new int[] {
+            this.NumStepsByFrame.Location = new System.Drawing.Point(270, 19);
+            this.NumStepsByFrame.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.NumInterval.Minimum = new decimal(new int[] {
+            this.NumStepsByFrame.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.NumInterval.Name = "NumInterval";
-            this.NumInterval.Size = new System.Drawing.Size(58, 23);
-            this.NumInterval.TabIndex = 1;
-            this.NumInterval.Value = new decimal(new int[] {
+            this.NumStepsByFrame.Name = "NumStepsByFrame";
+            this.NumStepsByFrame.Size = new System.Drawing.Size(58, 23);
+            this.NumStepsByFrame.TabIndex = 1;
+            this.NumStepsByFrame.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -224,7 +224,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicColor)).EndInit();
             this.GrpAnimation.ResumeLayout(false);
             this.GrpAnimation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumStepsByFrame)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -239,11 +239,11 @@
         private PictureBox PicColor;
         private GroupBox GrpAnimation;
         private CheckBox ChkAnimated;
-        private Label LblInterval;
-        private NumericUpDown NumInterval;
+        private Label LblSteps;
+        private NumericUpDown NumStepsByFrame;
         private Label LblColor;
         private Label LblImge;
-        private Label LblIntervalPerFrame;
+        private Label LblStepsByFrame;
         private Button BtnPicker;
     }
 }

@@ -1,8 +1,6 @@
-﻿using System.Numerics;
-
-namespace ParticleLifeSimulation.Core
+﻿namespace ParticleLifeSimulation.Core
 {
-    public class Particle
+    public class Particle : IDisposable
     {
         #region Events        
         /// <summary>
@@ -31,22 +29,6 @@ namespace ParticleLifeSimulation.Core
         /// </value>
         public double VY { get; set; }
         /// <summary>
-        /// Gets or sets the velocity.
-        /// </summary>
-        /// <value>
-        /// The velocity.
-        /// </value>
-        public Vector2 Velocity
-        {
-            get => new((float)VX, (float)VY);
-            set
-            {
-                X = value.X;
-                Y = value.Y;
-                ParticleVelocityChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-        /// <summary>
         /// Gets the x position.
         /// </summary>
         /// <value>
@@ -60,22 +42,6 @@ namespace ParticleLifeSimulation.Core
         /// The y position.
         /// </value>
         public double Y { get; set; }
-        /// <summary>
-        /// Gets or sets the position.
-        /// </summary>
-        /// <value>
-        /// The position.
-        /// </value>
-        public PointF Position
-        {
-            get => new((float)X, (float)Y);
-            set
-            {
-                X = value.X;
-                Y = value.Y;
-                ParticlePositionChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
         #endregion
 
         #region Constructors
@@ -101,15 +67,12 @@ namespace ParticleLifeSimulation.Core
             X = x;
             Y = y;
         }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Particle"/> class with defined position and atom.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="atom">The atom.</param>
-        public Particle(PointF position) : this()
+
+        public void Dispose()
         {
-            X = position.X;
-            Y = position.Y;
+            ParticlePositionChanged = null;
+            ParticleVelocityChanged = null;
+            //GC.SuppressFinalize(this);
         }
         #endregion
     }

@@ -64,22 +64,26 @@
         public void Step()
         {
             //For each Atom
-            foreach (Atom atomSource in Atoms)
+            Parallel.ForEach(Atoms, (Atom atomSource) =>
+            //foreach (Atom atomSource in Atoms)
             {
                 //With each Atom
-                foreach (Atom atomTarget in Atoms)
+                Parallel.ForEach(Atoms, (Atom atomTarget) =>
+                //foreach (Atom atomTarget in Atoms)
                 {
                     //Get forces between AtomSource and AtomTarget
                     double g = atomSource.Forces.Find(force => force.AtomTarget == atomTarget)?.Value ?? double.NaN;
-                    if (double.IsNaN(g)) continue;
+                    if (double.IsNaN(g)) return; //continue;
 
                     //For every Particles of AtomSource
+                    //Parallel.For(0, atomSource.Particles.Count, (int i) =>
                     for (int i = 0; i < atomSource.Particles.Count; i++)
                     {
                         Particle a = atomSource.Particles[i];
                         double fx = 0;
                         double fy = 0;
                         //With every Particles of Atom2
+                        //Parallel.For(0, atomTarget.Particles.Count, (int j) =>
                         for (int j = 0; j < atomTarget.Particles.Count; j++)
                         {
                             Particle b = atomTarget.Particles[j];
@@ -118,7 +122,7 @@
                                 fx += F * dx;
                                 fy += F * dy;
                             }
-                        }
+                        }//});
 
                         //Apply force to Particles velocity
                         //a.Velocity = new((float)(a.VX + fx) * 0.5f, (float)(a.VY + fy) * 0.5f);
@@ -186,24 +190,29 @@
                                 a.Y = Height - atomSource.Diameter;
                             }
                         }
-                    }
-                }
-            }
+                    }//});
+                });
+            });
         }
         #endregion
 
         #region Atoms
         public void AddAtom(Atom atom)
         {
-            if (Atoms.Contains(atom)) throw new InvalidAtomException("The atom already exists.");
-            Atoms.Add(atom);
-            UniverseAtomAdded?.Invoke(this, new UniverseEventArgs(atom));
+            if (!Atoms.Contains(atom))
+            {
+                Atoms.Add(atom);
+                UniverseAtomAdded?.Invoke(this, new UniverseEventArgs(atom));
+            }
         }
         public void RemoveAtom(Atom atom)
         {
-            if (!Atoms.Contains(atom)) throw new InvalidAtomException("The atom doesn't exists.");
-            Atoms.Remove(atom);
-            UniverseAtomRemoved?.Invoke(this, new(atom));
+            if (Atoms.Contains(atom))
+            {
+                Atoms.Remove(atom);
+                UniverseAtomRemoved?.Invoke(this, new(atom));
+                atom.Dispose();
+            }
         }
         #endregion
 
@@ -212,6 +221,13 @@
         {
             foreach (Atom atom in Atoms)
                 atom.ResetParticles();
+        }
+        public int ParticlesCount()
+        {
+            int particlesCount = 0;
+            foreach (Atom atom in Atoms)
+                particlesCount += atom.Particles.Count;
+            return particlesCount;
         }
         #endregion
     }

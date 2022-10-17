@@ -8,9 +8,9 @@ namespace ParticleLifeSimulation
         {
             InitializeComponent();
             PicColor.DataBindings.Add("BackColor", settings, "CanvasBackColor", true, DataSourceUpdateMode.OnPropertyChanged);
-            TxtFilename.DataBindings.Add("Text", settings, "CanvasBackgroundImage", true, DataSourceUpdateMode.OnPropertyChanged);
+            TxtFilename.DataBindings.Add("Text", settings, "CanvasBackgroundBitmap", true, DataSourceUpdateMode.OnPropertyChanged);
             ChkAnimated.DataBindings.Add("Checked", settings, "CanvasAnimated", true, DataSourceUpdateMode.OnPropertyChanged);
-            NumInterval.DataBindings.Add("Value", settings, "CanvasInterval", true, DataSourceUpdateMode.OnPropertyChanged);
+            NumStepsByFrame.DataBindings.Add("Value", settings, "CanvasStepsPerFrame", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace ParticleLifeSimulation
         /// Source: https://stackoverflow.com/a/69318375/5001494
         /// </summary>
         /// <returns></returns>
-        public static string GetImageFilter()
+        private static string GetImageFilter()
         {
             string imageExtensions = string.Empty;
             string separator = "";
@@ -75,6 +75,5 @@ namespace ParticleLifeSimulation
             }
             return result;
         }
-
     }
 }

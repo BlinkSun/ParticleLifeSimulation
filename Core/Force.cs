@@ -1,6 +1,6 @@
 ﻿namespace ParticleLifeSimulation.Core
 {
-    public class Force
+    public class Force : IDisposable
     {
         #region Events
         /// <summary>
@@ -22,10 +22,6 @@
         private string name;
         private double value;
         /// <summary>
-        /// Get the pseudo-random number generator.
-        /// </summary>
-        public Random Random { get; private set; }
-        /// <summary>
         /// Get or Set the force value. (Range [-1.0, 1.0] inclusive)
         /// </summary>
         /// <value>
@@ -36,8 +32,11 @@
             get => value;
             set
             {
-                this.value = Math.Clamp(value, MINVALUE, MAXVALUE);
-                ForceValueChanged?.Invoke(this, new());
+                if (this.value != Math.Clamp(value, MINVALUE, MAXVALUE))
+                {
+                    this.value = Math.Clamp(value, MINVALUE, MAXVALUE);
+                    ForceValueChanged?.Invoke(this, new());
+                }
             }
         }
         /// <summary>
@@ -51,8 +50,11 @@
             get => name;
             set
             {
-                name = value;
-                ForceNameChanged?.Invoke(this, new());
+                if (name != value)
+                {
+                    name = value;
+                    ForceNameChanged?.Invoke(this, new());
+                }
             }
         }
         /// <summary>
@@ -68,29 +70,38 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Force"/> class with random force value. Range [-1.0, 1.0]
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="atomTarget">The Atom target.</param>
         /// <param name="random">The pseudo-random number generator.</param>
-        public Force(string name, Atom atomTarget, Random? random = null)
+        public Force(Atom atomTarget)
         {
-            this.name = name;
+            name = atomTarget.Name;
+            value = (Random.Shared.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
             AtomTarget = atomTarget;
-            Random = random ?? Random.Shared;
-            value = (Random.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
+            AtomTarget.AtomNameChanged += new((s, ev) => Name = AtomTarget.Name);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Force"/> with defined name and force value. 
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="atomTarget">The Atom target.</param>
         /// <param name="value">The force value. (Range [-1.0, 1.0] inclusive)</param>
-        /// <param name="random">The pseudo-random number generator.</param>
-        public Force(string name, Atom atomTarget, double value, Random? random = null) : this(name, atomTarget, random) => this.value = value;
+        public Force(Atom atomTarget, double value) : this(atomTarget) => this.value = value;
         #endregion
 
         #region Force
         /// <summary>
         /// Reset random force value. (Range [-1.0, 1.0] inclusive)
         /// </summary>
-        public void ResetRandomForce() => Value = (Random.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
+        public void ResetRandomForce() => Value = (Random.Shared.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
+        #endregion
+
+        #region Finalize
+        public void Dispose()
+        {
+            ForceNameChanged = null;
+            ForceValueChanged = null;
+            AtomTarget = null;
+            //GC.SuppressFinalize(this);
+        }
         #endregion
     }
 }

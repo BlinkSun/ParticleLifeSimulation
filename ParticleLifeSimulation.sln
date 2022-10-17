@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticleLifeSimulation", "ParticleLifeSimulation.csproj", "{C191DEEA-D001-493F-9313-B5A4FCE7222E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{21BCE117-0075-4A3C-8B6B-8F7563ABFA37} = {21BCE117-0075-4A3C-8B6B-8F7563ABFA37}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomControls", "..\CustomControls\CustomControls.csproj", "{21BCE117-0075-4A3C-8B6B-8F7563ABFA37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{C191DEEA-D001-493F-9313-B5A4FCE7222E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C191DEEA-D001-493F-9313-B5A4FCE7222E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C191DEEA-D001-493F-9313-B5A4FCE7222E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21BCE117-0075-4A3C-8B6B-8F7563ABFA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21BCE117-0075-4A3C-8B6B-8F7563ABFA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21BCE117-0075-4A3C-8B6B-8F7563ABFA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21BCE117-0075-4A3C-8B6B-8F7563ABFA37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
