@@ -28,7 +28,7 @@ namespace ParticleLifeSimulation.Core
         /// </summary>
         /// <param name="force">The force to clone.</param>
         /// <returns>Clone of force.</returns>
-        public static Force ToClone(this Force force) => new(force.AtomTarget, force.Value);
+        public static Force ToClone(this Force force) => new(force.Target, force.Radiation, force.Attraction);
         #endregion
 
         #region Random        
@@ -38,10 +38,18 @@ namespace ParticleLifeSimulation.Core
         /// <param name="random">Pseudo-random number generator.</param>
         /// <returns>double [0.0, 1.0] (inclusive).</returns>
         public static double NextDoubleInclusive(this Random? random) => (random ?? Random.Shared).Next() * (1.0 / (int.MaxValue - 1.0));
+        /// <summary>
+        /// Gets random double with range [min, max] (inclusive).
+        /// </summary>
+        /// <param name="random">Pseudo-random number generator.</param>
+        /// <param name="min">Minimum double.</param>
+        /// <param name="max">Maximum double.</param>
+        /// <returns>double [min, max] (inclusive).</returns>
+        public static double NextDoubleInclusive(this Random? random, double min, double max) => (random.NextDoubleInclusive() * (max - min)) + min;
         #endregion
 
         #region Colors
-        public static Color GetRandomKnownColor() => GetKnownColors().ElementAt(Random.Shared.Next(GetKnownColors().Count()));
+        public static Color GetRandomKnownColor(bool systemColorsIncluded = false, bool compoundColorNamesIncluded = false) => GetKnownColors(systemColorsIncluded, compoundColorNamesIncluded).ElementAt(Random.Shared.Next(GetKnownColors(systemColorsIncluded, compoundColorNamesIncluded).Count()));
         public static IEnumerable<Color> GetKnownColors(bool systemColorsIncluded = false, bool compoundColorNamesIncluded = false)
         {
             IEnumerable<Color> knownsColors = Enum.GetValues(typeof(KnownColor)).Cast<KnownColor>().Select(knownColor => Color.FromKnownColor(knownColor));

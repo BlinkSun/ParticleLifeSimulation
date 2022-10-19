@@ -6,6 +6,8 @@
         //Universe's Events
         public event EventHandler<EventArgs>? UniverseSizeChanged;
         public event EventHandler<EventArgs>? UniverseWrapChanged;
+        public event EventHandler<EventArgs>? UniverseFrictionChanged;
+        public event EventHandler<EventArgs>? UniverseFlatForceChanged;
         //Particle's Events
         public event EventHandler<UniverseEventArgs>? UniverseParticleAdded;
         public event EventHandler<UniverseEventArgs>? UniverseParticleChanged;
@@ -26,10 +28,13 @@
             get => new((float)Width, (float)Height);
             set
             {
-                Width = value.Width;
-                Height = value.Height;
-                if (Atoms != null) foreach (Atom atom in Atoms) atom.ResetMaxSize(Width, Height);
-                UniverseSizeChanged?.Invoke(this, EventArgs.Empty);
+                if (Width != value.Width || Height != value.Height)
+                {
+                    Width = value.Width;
+                    Height = value.Height;
+                    if (Atoms != null) foreach (Atom atom in Atoms) atom.SetMaxSize(Width, Height);
+                    UniverseSizeChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
         public double Width { get; private set; }
@@ -39,24 +44,50 @@
             get => wrap;
             set
             {
-                wrap = value;
-                UniverseWrapChanged?.Invoke(this, EventArgs.Empty);
+                if (wrap != value)
+                {
+                    wrap = value;
+                    UniverseWrapChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
         private bool wrap;
+        public bool FlatForce
+        {
+            get => flatForce;
+            set
+            {
+                if (flatForce != value)
+                {
+                    flatForce = value;
+                    UniverseFlatForceChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        private bool flatForce;
+        public double Friction
+        {
+            get => friction;
+            set
+            {
+                if (value != friction)
+                {
+                    friction = value;
+                    UniverseFrictionChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        private double friction = 0.5;
         public List<Atom> Atoms { get; private set; }
         #endregion
 
         #region Constructors
-        public Universe(double width, double height, bool wrap = false)
+        public Universe(double width, double height)
         {
-            // Init Universe
+            Atoms = new();
+
             Width = width;
             Height = height;
-            this.wrap = wrap;
-
-            // Init Atoms
-            Atoms = new();
         }
         #endregion
 
@@ -72,7 +103,7 @@
                 //foreach (Atom atomTarget in Atoms)
                 {
                     //Get forces between AtomSource and AtomTarget
-                    double g = atomSource.Forces.Find(force => force.AtomTarget == atomTarget)?.Value ?? double.NaN;
+                    double g = atomSource.Forces.Find(force => force.Target == atomTarget)?.Attraction ?? double.NaN;
                     if (double.IsNaN(g)) return; //continue;
 
                     //For every Particles of AtomSource
@@ -114,25 +145,33 @@
                                 }
                             }
 
+                            // Get distance squared
+                            double r2 = (dx * dx) + (dy * dy);
+
+                            //// Normalize displacement
+                            //double r = Math.Sqrt(r2);
+                            //dx /= r;
+                            //dy /= r;
+
                             //Calculate the intensity of force
-                            double d = Math.Sqrt((dx * dx) + (dy * dy));
+                            double d = Math.Sqrt(r2);
                             if (d > 0 && d < 80)
                             {
                                 double F = g * 1 / d;
                                 fx += F * dx;
                                 fy += F * dy;
                             }
-                        }//});
+                        }
 
                         //Apply force to Particles velocity
-                        //a.Velocity = new((float)(a.VX + fx) * 0.5f, (float)(a.VY + fy) * 0.5f);
-                        a.VX = (a.VX + fx) * 0.5;
-                        a.VY = (a.VY + fy) * 0.5;
-                        //a.Position = new((float)(a.X + a.VX), (float)(a.Y + a.VY));
+                        a.VX = (a.VX + fx) * (1.0 - friction);// * 0.5;
+                        a.VY = (a.VY + fy) * (1.0 - friction);// * 0.5;
                         a.X += a.VX;
                         a.Y += a.VY;
+                        //a.VX *= 1.0 - friction;
+                        //a.VY *= 1.0 - friction;
 
-                        //Apply velocity to Particles position
+                        //Apply Edge Collision or Wrapping to Particles position
                         //If Wrapping,
                         if (Wrap)
                         {
@@ -190,7 +229,7 @@
                                 a.Y = Height - atomSource.Diameter;
                             }
                         }
-                    }//});
+                    }
                 });
             });
         }
@@ -209,26 +248,16 @@
         {
             if (Atoms.Contains(atom))
             {
+                atom.Dispose();
                 Atoms.Remove(atom);
                 UniverseAtomRemoved?.Invoke(this, new(atom));
-                atom.Dispose();
             }
         }
         #endregion
 
         #region Particles
-        public void ResetAllParticles()
-        {
-            foreach (Atom atom in Atoms)
-                atom.ResetParticles();
-        }
-        public int ParticlesCount()
-        {
-            int particlesCount = 0;
-            foreach (Atom atom in Atoms)
-                particlesCount += atom.Particles.Count;
-            return particlesCount;
-        }
+        public void ResetParticles() => Atoms.ForEach(atom => atom.ResetParticles());
+        public int ParticlesCount() => Atoms.Sum(atom => atom.Particles.Count);
         #endregion
     }
 }

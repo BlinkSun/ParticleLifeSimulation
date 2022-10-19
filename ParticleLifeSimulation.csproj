@@ -7,17 +7,17 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <IsPublishable>False</IsPublishable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AviFile\AudioStream.cs" />
-    <Compile Remove="AviFile\Avi.cs" />
-    <Compile Remove="AviFile\AviManager.cs" />
-    <Compile Remove="AviFile\AviPlayer.cs" />
-    <Compile Remove="AviFile\AviStream.cs" />
-    <Compile Remove="AviFile\EditableVideoStream.cs" />
-    <Compile Remove="AviFile\VideoStream.cs" />
+    <Compile Remove="AviFile\**" />
+    <EmbeddedResource Remove="AviFile\**" />
+    <None Remove="AviFile\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="FrmMandlebrot.cs" />
     <Compile Remove="FrmMandlebrot.Designer.cs" />
   </ItemGroup>
@@ -38,9 +38,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="UserControls\Canvas.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="UserControls\Slider.cs">
       <SubType>UserControl</SubType>

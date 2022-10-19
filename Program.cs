@@ -29,7 +29,7 @@ public static class Program
                 }
             }
         });
-        Application.Run(new FrmUniverse());
+        Application.Run(new FrmSimulation());
     }
 
     [System.Security.SuppressUnmanagedCodeSecurity] // We won't use this maliciously
@@ -38,7 +38,7 @@ public static class Program
     private static bool AppStillIdle => !PeekMessage(out _, IntPtr.Zero, 0, 0, 0);
 }
 
-interface IFormLoop
+internal interface IFormLoop
 {
     public void UpdateEnvironment(long deltaTime);
     public void RenderEnvironment(long deltaTime);

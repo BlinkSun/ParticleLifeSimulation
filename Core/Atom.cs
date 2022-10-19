@@ -30,11 +30,7 @@
         /// <summary>
         /// Occurs when particle of the atom have been reset.
         /// </summary>
-        public event EventHandler<EventArgs>? AtomParticlesReset;
-        /// <summary>
-        /// Occurs when particle of the atom have been cleared.
-        /// </summary>
-        public event EventHandler<EventArgs>? AtomParticlesCleared;
+        public event EventHandler<AtomEventArgs>? AtomParticlesReset;
         /// <summary>
         /// Occurs when particle of the atom have been added.
         /// </summary>
@@ -50,15 +46,8 @@
         #endregion
 
         #region Properties
-        private string name;
-        private Color color;
-        private double radius = 2.0;
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
+        public List<Force> Forces { get; private set; }
+        public List<Particle> Particles { get; private set; }
         public string Name
         {
             get => name;
@@ -71,12 +60,7 @@
                 }
             }
         }
-        /// <summary>
-        /// Gets or sets the color.
-        /// </summary>
-        /// <value>
-        /// The color.
-        /// </value>
+        private string name;
         public Color Color
         {
             get => color;
@@ -89,26 +73,7 @@
                 }
             }
         }
-        /// <summary>
-        /// Gets the particles.
-        /// </summary>
-        /// <value>
-        /// The particles.
-        /// </value>
-        public List<Particle> Particles { get; private set; }
-        /// <summary>
-        /// Gets the forces.
-        /// </summary>
-        /// <value>
-        /// The forces.
-        /// </value>
-        public List<Force> Forces { get; private set; }
-        /// <summary>
-        /// Gets or sets the radius.
-        /// </summary>
-        /// <value>
-        /// The radius.
-        /// </value>
+        private Color color;
         public double Radius
         {
             get => radius;
@@ -121,12 +86,7 @@
                 }
             }
         }
-        /// <summary>
-        /// Gets or sets the diameter.
-        /// </summary>
-        /// <value>
-        /// The diameter.
-        /// </value>
+        private double radius;
         public double Diameter
         {
             get => radius * 2.0;
@@ -139,76 +99,37 @@
                 }
             }
         }
-        /// <summary>
-        /// Gets or sets the max width.
-        /// </summary>
-        /// <value>
-        /// The max width.
-        /// </value>
-        public double MaxWidth { get; set; }
-        /// <summary>
-        /// Gets or sets the max height.
-        /// </summary>
-        /// <value>
-        /// The max height.
-        /// </value>
-        public double MaxHeight { get; set; }
+        public double MaxWidth { get; private set; }
+        public double MaxHeight { get; private set; }
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Atom"/> class with default values.
-        /// </summary>
-        public Atom(double maxWidth, double maxHeight)
+        public Atom(string name, Color color, double maxWidth, double maxHeight, double radius)
         {
-            Particles = new();
             Forces = new();
-            color = Color.White;
-            name = color.Name;
-            radius = 2.0;
+            Particles = new();
+            this.name = name;
+            this.color = color;
+            this.radius = radius;
             MaxWidth = maxWidth;
             MaxHeight = maxHeight;
         }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Atom"/> class with defined name and default values.
-        /// </summary>
-        /// <param name="name">The name of the atom.</param>
-        public Atom(string name, double maxWidth, double maxHeight) : this(maxWidth, maxHeight) => this.name = name;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Atom"/> class with defined color and default values.
-        /// </summary>
-        /// <param name="color">The color of the atom.</param>
-        public Atom(Color color, double maxWidth, double maxHeight) : this(color.Name, maxWidth, maxHeight) => this.color = color;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Atom"/> class with defined name, color and default values.
-        /// </summary>
-        /// <param name="name">The name of the atom.</param>
-        /// <param name="color">The color of the atom.</param>
-        public Atom(string name, Color color, double maxWidth, double maxHeight, double radius) : this(maxWidth, maxHeight)
-        {
-            this.color = color;
-            this.name = name;
-            this.radius = radius;
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Atom"/> class with defined name, color and particles.
-        /// </summary>
-        /// <param name="name">The name of the atom.</param>
-        /// <param name="color">The color of the atom.</param>
-        /// <param name="particlesNumber">The number of particles in the atom.</param>
         public Atom(string name, Color color, double maxWidth, double maxHeight, double radius, int particleNumber) : this(name, color, maxWidth, maxHeight, radius) => AddParticles(particleNumber);
         #endregion
 
-        #region Particles
-        public void AddParticle(Particle particle)
+        #region Atom
+        public void SetMaxSize(double maxWidth, double maxHeight)
         {
-            if (Particles.Contains(particle)) throw new InvalidAtomException("The particle already exists in that atom.");
-            Particles.Add(particle);
+            MaxWidth = maxWidth;
+            MaxHeight = maxHeight;
         }
-        public void AddParticles(List<Particle> particles)
+        #endregion
+
+        #region Particles
+        public void AddParticles(IEnumerable<Particle> particles)
         {
             foreach (Particle particle in particles)
-                AddParticle(particle);
+                Particles.Add(particle);
             AtomParticlesAdded?.Invoke(this, new(particles));
         }
         public void AddParticles(int number)
@@ -222,16 +143,10 @@
                 double y = (Random.Shared.NextDoubleInclusive() * (MaxHeight - (2 * yOffSet))) + yOffSet;
                 Particle particle = new(x, y);
                 particlesAdded.Add(particle);
-                Particles.Add(particle);
             }
-            AtomParticlesAdded?.Invoke(this, new(particlesAdded));
+            AddParticles(particlesAdded);
         }
 
-        public void RemoveParticle(Particle particle)
-        {
-            if (Particles.Contains(particle))
-                Particles.Remove(particle);
-        }
         public void RemoveParticles(int number)
         {
             if (number < 0 || number > Particles.Count)
@@ -241,34 +156,26 @@
             {
                 int index = Random.Shared.Next(Particles.Count);
                 Particle particleToRemove = Particles[index];
+                while (particlesRemoved.Contains(particleToRemove))
+                {
+                    index = Random.Shared.Next(Particles.Count);
+                    particleToRemove = Particles[index];
+                }
                 particlesRemoved.Add(particleToRemove);
-                RemoveParticle(particleToRemove);
             }
-
-            AtomParticlesRemoved?.Invoke(this, new(particlesRemoved));
-
-            foreach (Particle particle in particlesRemoved)
-                particle.Dispose();
+            RemoveParticles(particlesRemoved);
         }
-        public void RemoveParticles(List<Particle> particles)
+        public void RemoveParticles(IEnumerable<Particle> particles)
         {
             foreach (Particle particle in particles)
-                RemoveParticle(particle);
-
+                Particles.Remove(particle);
             AtomParticlesRemoved?.Invoke(this, new(particles));
-
-            foreach (Particle particle in particles)
-                particle.Dispose();
         }
 
         public void ClearParticles()
         {
-            foreach (Particle particle in Particles)
-                particle.Dispose();
-
             Particles.Clear();
-
-            AtomParticlesCleared?.Invoke(this, EventArgs.Empty);
+            AtomParticlesChanged?.Invoke(this, EventArgs.Empty);
         }
         public void UpdateParticles(int newCount)
         {
@@ -277,13 +184,11 @@
                 AddParticles(diffCount);
             else if (diffCount < 0)
                 RemoveParticles(Math.Abs(diffCount));
-
             AtomParticlesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void ResetParticle(Particle particle)
         {
-            if (!Particles.Contains(particle)) throw new InvalidAtomException("The particle doesn't exists in that atom.");
             double xOffSet = MaxWidth * 0.1;
             double yOffSet = MaxHeight * 0.1;
             double x = (Random.Shared.NextDoubleInclusive() * (MaxWidth - (2 * xOffSet))) + xOffSet;
@@ -293,27 +198,18 @@
             particle.VX = 0;
             particle.VY = 0;
         }
-        public void ResetParticles(List<Particle> particles)
+        public void ResetParticles(IEnumerable<Particle> particles)
         {
-            foreach (Particle particle in Particles)
+            foreach (Particle particle in particles)
                 ResetParticle(particle);
-            AtomParticlesReset?.Invoke(this, EventArgs.Empty);
+            AtomParticlesReset?.Invoke(this, new(particles));
         }
         public void ResetParticles() => ResetParticles(Particles);
         #endregion
 
         #region Forces
-        /// <summary>
-        /// Gets the force with another atom target.
-        /// </summary>
-        /// <param name="atom">The atom target.</param>
-        /// <returns>The Force.</returns>
-        public Force? GetForceWith(Atom atomTarget) => Forces.FirstOrDefault(force => force.AtomTarget == atomTarget);
-        /// <summary>
-        /// Add the force to the atom.
-        /// </summary>
-        /// <param name="force">The force to add.</param>
-        /// <exception cref="InvalidAtomException">The force already exist.</exception>
+        public bool HasForceWith(Atom target) => Forces.FirstOrDefault(force => force.Target == target) is not null;
+        public Force GetForceWith(Atom target) => Forces.Single(force => force.Target == target);
         public void AddForce(Force force)
         {
             if (!Forces.Contains(force))
@@ -322,75 +218,30 @@
                 AtomForceAdded?.Invoke(this, new(force));
             }
         }
-        /// <summary>
-        /// Add the forces to the atom.
-        /// </summary>
-        /// <param name="forces">The forces to add.</param>
         public void AddForces(IEnumerable<Force> forces)
         {
-            foreach (Force force in forces)
-                AddForce(force);
+            foreach (Force force in forces) AddForce(force);
         }
-        /// <summary>
-        /// Remove the force to the atom.
-        /// </summary>
-        /// <param name="force">The force to remove.</param>
-        /// <exception cref="InvalidAtomException">The force doesn't exists.</exception>
         public void RemoveForce(Force force)
         {
-            if (Forces.Contains(force))
-            {
-                Forces.Remove(force);
-                AtomForceRemoved?.Invoke(this, new(force));
-                force.Dispose();
-            }
+            Forces.Remove(force);
+            force.Dispose();
+            AtomForceRemoved?.Invoke(this, new(force));
         }
-        /// <summary>
-        /// Remove the force to the atom with atomTarget.
-        /// </summary>
-        /// <param name="atomTarget">The force to remove with atomTarget.</param>
-        /// <exception cref="InvalidAtomException">The force doesn't exists.</exception>
-        public void RemoveForceWith(Atom atomTarget)
+        public void RemoveForceWith(Atom target)
         {
-            if (HasForceWith(atomTarget))
-                RemoveForce(GetForceWith(atomTarget)!);
+            if (HasForceWith(target)) RemoveForce(GetForceWith(target));
         }
-        /// <summary>
-        /// Remove the forces to the atom.
-        /// </summary>
-        /// <param name="forces">The forces to remove.</param>
         public void RemoveForces(IEnumerable<Force> forces)
         {
-            foreach (Force force in forces)
-                RemoveForce(force);
+            foreach (Force force in forces) RemoveForce(force);
         }
-        /// <summary>
-        /// Clears all forces of the atom.
-        /// </summary>
         public void ClearForces()
         {
-
-            foreach (Force force in Forces)
-                force.Dispose();
+            foreach (Force force in Forces) force.Dispose();
             Forces.Clear();
             AtomForcesCleared?.Invoke(this, EventArgs.Empty);
         }
-        /// <summary>
-        /// Reset max width and max height.
-        /// </summary>
-        /// <param name="maxWidth"></param>
-        /// <param name="maxHeight"></param>
-        public void ResetMaxSize(double maxWidth, double maxHeight)
-        {
-            MaxWidth = maxWidth;
-            MaxHeight = maxHeight;
-        }
-        /// <summary>
-        /// Determines if atom have force with atom target.
-        /// </summary>
-        /// <param name="atomTarget">The atom target.</param>
-        /// <returns>True if has force with, else false.</returns>
-        public bool HasForceWith(Atom atomTarget) => Forces.FirstOrDefault(force => force.AtomTarget == atomTarget) is not null;
         #endregion
 
         #region Finalize
@@ -398,6 +249,7 @@
         {
             ClearForces();
             ClearParticles();
+
             AtomNameChanged = null;
             AtomColorChanged = null;
             AtomRadiusChanged = null;
@@ -407,11 +259,11 @@
             AtomForceRemoved = null;
 
             AtomParticlesReset = null;
-            AtomParticlesCleared = null;
-            AtomParticlesChanged = null;
             AtomParticlesAdded = null;
             AtomParticlesRemoved = null;
-            //GC.SuppressFinalize(this);
+            AtomParticlesChanged = null;
+
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

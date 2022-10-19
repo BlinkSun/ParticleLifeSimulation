@@ -4,59 +4,28 @@ namespace ParticleLifeSimulation
 {
     public class Settings : ApplicationSettingsBase
     {
-        //[ApplicationScopedSetting]
-        //public string FormText
-        //{
-        //    get { return (string)this["FormText"]; }
-        //    set => this[nameof(FormText)] = value;
-        //}
-
-        //[UserScopedSetting]
-        //[DefaultSettingValue("0, 0")]
-        //public Point FormLocation
-        //{
-        //    get { return (Point)this["FormLocation"]; }
-        //    set { this["FormLocation"] = value; }
-        //}
-
-        //[UserScopedSetting]
-        //[DefaultSettingValue("225, 200")]
-        //public Size FormSize
-        //{
-        //    get { return (Size)this["FormSize"]; }
-        //    set { this["FormSize"] = value; }
-        //}
-
         [UserScopedSetting]
         [DefaultSettingValue("Control")]
-        public Color CanvasBackColor
+        public Color SimulationBackColor
         {
-            get => (Color)this[nameof(CanvasBackColor)];
-            set => this[nameof(CanvasBackColor)] = value;
-        }
-
-        [UserScopedSetting]
-        [DefaultSettingValue("")]
-        public string CanvasBackgroundBitmap
-        {
-            get => (string)this[nameof(CanvasBackgroundBitmap)];
-            set => this[nameof(CanvasBackgroundBitmap)] = value;
+            get => (Color)this[nameof(SimulationBackColor)];
+            set => this[nameof(SimulationBackColor)] = value;
         }
 
         [UserScopedSetting]
         [DefaultSettingValue("1")]
-        public int CanvasStepsPerFrame
+        public int SimulationStepsPerFrame
         {
-            get => (int)this[nameof(CanvasStepsPerFrame)];
-            set => this[nameof(CanvasStepsPerFrame)] = value;
+            get => (int)this[nameof(SimulationStepsPerFrame)];
+            set => this[nameof(SimulationStepsPerFrame)] = value;
         }
 
         [UserScopedSetting]
         [DefaultSettingValue("true")]
-        public bool CanvasAnimated
+        public bool SimulationAnimated
         {
-            get => (bool)this[nameof(CanvasAnimated)];
-            set => this[nameof(CanvasAnimated)] = value;
+            get => (bool)this[nameof(SimulationAnimated)];
+            set => this[nameof(SimulationAnimated)] = value;
         }
 
         [UserScopedSetting]
@@ -69,10 +38,26 @@ namespace ParticleLifeSimulation
 
         [UserScopedSetting]
         [DefaultSettingValue("false")]
-        public bool ParticlesBorder
+        public bool ParticlesBorderless
         {
-            get => (bool)this[nameof(ParticlesBorder)];
-            set => this[nameof(ParticlesBorder)] = value;
+            get => (bool)this[nameof(ParticlesBorderless)];
+            set => this[nameof(ParticlesBorderless)] = value;
+        }
+
+        [UserScopedSetting]
+        [DefaultSettingValue("false")]
+        public bool ParticlesSystemColorsIncluded
+        {
+            get => (bool)this[nameof(ParticlesSystemColorsIncluded)];
+            set => this[nameof(ParticlesSystemColorsIncluded)] = value;
+        }
+
+        [UserScopedSetting]
+        [DefaultSettingValue("false")]
+        public bool ParticlesCompoundColorNamesIncluded
+        {
+            get => (bool)this[nameof(ParticlesCompoundColorNamesIncluded)];
+            set => this[nameof(ParticlesCompoundColorNamesIncluded)] = value;
         }
     }
 }

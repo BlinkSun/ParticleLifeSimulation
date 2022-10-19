@@ -42,12 +42,15 @@
             this.PicColor = new System.Windows.Forms.PictureBox();
             this.GrpAtomForces = new System.Windows.Forms.GroupBox();
             this.GrpForce = new System.Windows.Forms.GroupBox();
-            this.LblAtomName = new System.Windows.Forms.Label();
-            this.BtnRandom = new System.Windows.Forms.Button();
-            this.LblValue = new System.Windows.Forms.Label();
-            this.NumValue = new System.Windows.Forms.NumericUpDown();
+            this.BtnRandomRadiation = new System.Windows.Forms.Button();
+            this.NumRadiation = new System.Windows.Forms.NumericUpDown();
+            this.LblRadiation = new System.Windows.Forms.Label();
+            this.LblTargetName = new System.Windows.Forms.Label();
+            this.BtnRandomAttraction = new System.Windows.Forms.Button();
+            this.LblAttraction = new System.Windows.Forms.Label();
+            this.NumAttraction = new System.Windows.Forms.NumericUpDown();
             this.BtnSave = new System.Windows.Forms.Button();
-            this.LblAtom = new System.Windows.Forms.Label();
+            this.LblTarget = new System.Windows.Forms.Label();
             this.LstForces = new System.Windows.Forms.ListBox();
             this.GrpAtomSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumParticles)).BeginInit();
@@ -55,13 +58,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicColor)).BeginInit();
             this.GrpAtomForces.SuspendLayout();
             this.GrpForce.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumRadiation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumAttraction)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnOk
             // 
             this.BtnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnOk.Location = new System.Drawing.Point(423, 288);
+            this.BtnOk.Location = new System.Drawing.Point(423, 330);
             this.BtnOk.Name = "BtnOk";
             this.BtnOk.Size = new System.Drawing.Size(47, 30);
             this.BtnOk.TabIndex = 14;
@@ -72,7 +76,7 @@
             // BtnCancel
             // 
             this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCancel.Location = new System.Drawing.Point(337, 288);
+            this.BtnCancel.Location = new System.Drawing.Point(337, 330);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(80, 30);
             this.BtnCancel.TabIndex = 13;
@@ -151,12 +155,12 @@
             1,
             0,
             0,
-            0});
+            65536});
             this.NumRadius.Name = "NumRadius";
             this.NumRadius.Size = new System.Drawing.Size(131, 23);
             this.NumRadius.TabIndex = 2;
             this.NumRadius.Value = new decimal(new int[] {
-            25,
+            1,
             0,
             0,
             65536});
@@ -202,93 +206,134 @@
             this.GrpAtomForces.Controls.Add(this.LstForces);
             this.GrpAtomForces.Location = new System.Drawing.Point(12, 127);
             this.GrpAtomForces.Name = "GrpAtomForces";
-            this.GrpAtomForces.Size = new System.Drawing.Size(458, 151);
+            this.GrpAtomForces.Size = new System.Drawing.Size(458, 192);
             this.GrpAtomForces.TabIndex = 2;
             this.GrpAtomForces.TabStop = false;
             this.GrpAtomForces.Text = "Atom Forces";
             // 
             // GrpForce
             // 
-            this.GrpForce.Controls.Add(this.LblAtomName);
-            this.GrpForce.Controls.Add(this.BtnRandom);
-            this.GrpForce.Controls.Add(this.LblValue);
-            this.GrpForce.Controls.Add(this.NumValue);
+            this.GrpForce.Controls.Add(this.BtnRandomRadiation);
+            this.GrpForce.Controls.Add(this.NumRadiation);
+            this.GrpForce.Controls.Add(this.LblRadiation);
+            this.GrpForce.Controls.Add(this.LblTargetName);
+            this.GrpForce.Controls.Add(this.BtnRandomAttraction);
+            this.GrpForce.Controls.Add(this.LblAttraction);
+            this.GrpForce.Controls.Add(this.NumAttraction);
             this.GrpForce.Controls.Add(this.BtnSave);
-            this.GrpForce.Controls.Add(this.LblAtom);
-            this.GrpForce.Location = new System.Drawing.Point(189, 22);
+            this.GrpForce.Controls.Add(this.LblTarget);
+            this.GrpForce.Location = new System.Drawing.Point(167, 22);
             this.GrpForce.Name = "GrpForce";
-            this.GrpForce.Size = new System.Drawing.Size(252, 110);
+            this.GrpForce.Size = new System.Drawing.Size(274, 155);
             this.GrpForce.TabIndex = 1;
             this.GrpForce.TabStop = false;
             this.GrpForce.Text = "Force";
             // 
-            // LblAtomName
+            // BtnRandomRadiation
             // 
-            this.LblAtomName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LblAtomName.Location = new System.Drawing.Point(75, 18);
-            this.LblAtomName.Name = "LblAtomName";
-            this.LblAtomName.Size = new System.Drawing.Size(155, 23);
-            this.LblAtomName.TabIndex = 13;
+            this.BtnRandomRadiation.Location = new System.Drawing.Point(195, 50);
+            this.BtnRandomRadiation.Name = "BtnRandomRadiation";
+            this.BtnRandomRadiation.Size = new System.Drawing.Size(61, 23);
+            this.BtnRandomRadiation.TabIndex = 16;
+            this.BtnRandomRadiation.Text = "Random";
+            this.BtnRandomRadiation.UseVisualStyleBackColor = true;
             // 
-            // BtnRandom
+            // NumRadiation
             // 
-            this.BtnRandom.Location = new System.Drawing.Point(75, 74);
-            this.BtnRandom.Name = "BtnRandom";
-            this.BtnRandom.Size = new System.Drawing.Size(81, 24);
-            this.BtnRandom.TabIndex = 12;
-            this.BtnRandom.Text = "Random";
-            this.BtnRandom.UseVisualStyleBackColor = true;
-            // 
-            // LblValue
-            // 
-            this.LblValue.AutoSize = true;
-            this.LblValue.Location = new System.Drawing.Point(13, 48);
-            this.LblValue.Name = "LblValue";
-            this.LblValue.Size = new System.Drawing.Size(41, 15);
-            this.LblValue.TabIndex = 4;
-            this.LblValue.Text = "Value :";
-            // 
-            // NumValue
-            // 
-            this.NumValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NumValue.DecimalPlaces = 10;
-            this.NumValue.Increment = new decimal(new int[] {
+            this.NumRadiation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.NumRadiation.DecimalPlaces = 10;
+            this.NumRadiation.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.NumValue.Location = new System.Drawing.Point(75, 46);
-            this.NumValue.Maximum = new decimal(new int[] {
+            this.NumRadiation.Location = new System.Drawing.Point(88, 50);
+            this.NumRadiation.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.NumValue.Minimum = new decimal(new int[] {
+            this.NumRadiation.Name = "NumRadiation";
+            this.NumRadiation.Size = new System.Drawing.Size(101, 23);
+            this.NumRadiation.TabIndex = 15;
+            // 
+            // LblRadiation
+            // 
+            this.LblRadiation.AutoSize = true;
+            this.LblRadiation.Location = new System.Drawing.Point(13, 52);
+            this.LblRadiation.Name = "LblRadiation";
+            this.LblRadiation.Size = new System.Drawing.Size(63, 15);
+            this.LblRadiation.TabIndex = 14;
+            this.LblRadiation.Text = "Radiation :";
+            // 
+            // LblTargetName
+            // 
+            this.LblTargetName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LblTargetName.Location = new System.Drawing.Point(88, 18);
+            this.LblTargetName.Name = "LblTargetName";
+            this.LblTargetName.Size = new System.Drawing.Size(168, 23);
+            this.LblTargetName.TabIndex = 13;
+            this.LblTargetName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BtnRandomAttraction
+            // 
+            this.BtnRandomAttraction.Location = new System.Drawing.Point(195, 81);
+            this.BtnRandomAttraction.Name = "BtnRandomAttraction";
+            this.BtnRandomAttraction.Size = new System.Drawing.Size(61, 23);
+            this.BtnRandomAttraction.TabIndex = 12;
+            this.BtnRandomAttraction.Text = "Random";
+            this.BtnRandomAttraction.UseVisualStyleBackColor = true;
+            // 
+            // LblAttraction
+            // 
+            this.LblAttraction.AutoSize = true;
+            this.LblAttraction.Location = new System.Drawing.Point(13, 83);
+            this.LblAttraction.Name = "LblAttraction";
+            this.LblAttraction.Size = new System.Drawing.Size(66, 15);
+            this.LblAttraction.TabIndex = 4;
+            this.LblAttraction.Text = "Attraction :";
+            // 
+            // NumAttraction
+            // 
+            this.NumAttraction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.NumAttraction.DecimalPlaces = 10;
+            this.NumAttraction.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumAttraction.Location = new System.Drawing.Point(88, 81);
+            this.NumAttraction.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NumAttraction.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             -2147483648});
-            this.NumValue.Name = "NumValue";
-            this.NumValue.Size = new System.Drawing.Size(155, 23);
-            this.NumValue.TabIndex = 7;
+            this.NumAttraction.Name = "NumAttraction";
+            this.NumAttraction.Size = new System.Drawing.Size(101, 23);
+            this.NumAttraction.TabIndex = 7;
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(171, 74);
+            this.BtnSave.Location = new System.Drawing.Point(195, 117);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(59, 24);
+            this.BtnSave.Size = new System.Drawing.Size(61, 24);
             this.BtnSave.TabIndex = 11;
             this.BtnSave.Text = "Save";
             this.BtnSave.UseVisualStyleBackColor = true;
             // 
-            // LblAtom
+            // LblTarget
             // 
-            this.LblAtom.AutoSize = true;
-            this.LblAtom.Location = new System.Drawing.Point(13, 19);
-            this.LblAtom.Name = "LblAtom";
-            this.LblAtom.Size = new System.Drawing.Size(43, 15);
-            this.LblAtom.TabIndex = 4;
-            this.LblAtom.Text = "Atom :";
+            this.LblTarget.AutoSize = true;
+            this.LblTarget.Location = new System.Drawing.Point(13, 22);
+            this.LblTarget.Name = "LblTarget";
+            this.LblTarget.Size = new System.Drawing.Size(45, 15);
+            this.LblTarget.TabIndex = 4;
+            this.LblTarget.Text = "Target :";
             // 
             // LstForces
             // 
@@ -298,7 +343,7 @@
             this.LstForces.Location = new System.Drawing.Point(19, 25);
             this.LstForces.Name = "LstForces";
             this.LstForces.ScrollAlwaysVisible = true;
-            this.LstForces.Size = new System.Drawing.Size(153, 107);
+            this.LstForces.Size = new System.Drawing.Size(142, 152);
             this.LstForces.TabIndex = 5;
             // 
             // FrmAtom
@@ -307,7 +352,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
-            this.ClientSize = new System.Drawing.Size(482, 330);
+            this.ClientSize = new System.Drawing.Size(482, 372);
             this.Controls.Add(this.GrpAtomForces);
             this.Controls.Add(this.GrpAtomSettings);
             this.Controls.Add(this.BtnCancel);
@@ -323,7 +368,8 @@
             this.GrpAtomForces.ResumeLayout(false);
             this.GrpForce.ResumeLayout(false);
             this.GrpForce.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumRadiation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumAttraction)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -345,11 +391,14 @@
         private GroupBox GrpAtomForces;
         private ListBox LstForces;
         private GroupBox GrpForce;
-        private Label LblValue;
-        private NumericUpDown NumValue;
-        private Label LblAtom;
+        private Label LblAttraction;
+        private NumericUpDown NumAttraction;
+        private Label LblTarget;
         private Button BtnSave;
-        private Button BtnRandom;
-        private Label LblAtomName;
+        private Button BtnRandomAttraction;
+        private Label LblTargetName;
+        private Button BtnRandomRadiation;
+        private NumericUpDown NumRadiation;
+        private Label LblRadiation;
     }
 }

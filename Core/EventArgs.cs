@@ -82,7 +82,7 @@
         /// <value>
         /// The particles affected.
         /// </value>
-        public List<Particle>? Particles { get; private set; }
+        public IEnumerable<Particle>? Particles { get; private set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="AtomEventArgs"/> class.
         /// </summary>
@@ -97,7 +97,7 @@
         /// Initializes a new instance of the <see cref="AtomEventArgs"/> class.
         /// </summary>
         /// <param name="particle">The particles affected.</param>
-        public AtomEventArgs(List<Particle> particles) => Particles = particles;
+        public AtomEventArgs(IEnumerable<Particle> particles) => Particles = particles;
     }
     /// <summary>
     /// Contain Force event data.

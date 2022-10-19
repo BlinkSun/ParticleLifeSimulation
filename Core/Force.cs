@@ -8,99 +8,78 @@
         /// </summary>
         public event EventHandler<ForceEventArgs>? ForceNameChanged;
         /// <summary>
-        /// Occurs when the force value have changed.
+        /// Occurs when the attraction value have changed.
         /// </summary>
-        public event EventHandler<ForceEventArgs>? ForceValueChanged;
+        public event EventHandler<ForceEventArgs>? ForceAttractionChanged;
+        /// <summary>
+        /// Occurs when the radiation value have changed.
+        /// </summary>
+        public event EventHandler<ForceEventArgs>? ForceRadiationChanged;
         #endregion
 
-        #region Constantes
+        #region Constants
         private const double MINVALUE = -1.0;
         private const double MAXVALUE = 1.0;
         #endregion
 
         #region Properties
-        private string name;
-        private double value;
-        /// <summary>
-        /// Get or Set the force value. (Range [-1.0, 1.0] inclusive)
-        /// </summary>
-        /// <value>
-        /// The value. (Range [-1.0, 1.0] inclusive)
-        /// </value>
-        public double Value
+        public Atom Target { get; private set; }
+        public string Name { get => Target.Name; }
+        public double Radiation
         {
-            get => value;
+            get => radiation;
             set
             {
-                if (this.value != Math.Clamp(value, MINVALUE, MAXVALUE))
+                if (radiation != Math.Clamp(value, 0.0, MAXVALUE))
                 {
-                    this.value = Math.Clamp(value, MINVALUE, MAXVALUE);
-                    ForceValueChanged?.Invoke(this, new());
+                    radiation = Math.Clamp(value, 0.0, MAXVALUE);
+                    ForceRadiationChanged?.Invoke(this, new());
                 }
             }
         }
-        /// <summary>
-        /// Gets or sets the force name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name
+        private double radiation;
+        public double Attraction
         {
-            get => name;
+            get => attraction;
             set
             {
-                if (name != value)
+                if (attraction != Math.Clamp(value, MINVALUE, MAXVALUE))
                 {
-                    name = value;
-                    ForceNameChanged?.Invoke(this, new());
+                    attraction = Math.Clamp(value, MINVALUE, MAXVALUE);
+                    ForceAttractionChanged?.Invoke(this, new());
                 }
             }
         }
-        /// <summary>
-        /// Gets the atom target.
-        /// </summary>
-        /// <value>
-        /// The atom target.
-        /// </value>
-        public Atom AtomTarget { get; private set; }
+        private double attraction;
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Force"/> class with random force value. Range [-1.0, 1.0]
-        /// </summary>
-        /// <param name="atomTarget">The Atom target.</param>
-        /// <param name="random">The pseudo-random number generator.</param>
-        public Force(Atom atomTarget)
+        public Force(Atom target, double radiation, double attraction)
         {
-            name = atomTarget.Name;
-            value = (Random.Shared.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
-            AtomTarget = atomTarget;
-            AtomTarget.AtomNameChanged += new((s, ev) => Name = AtomTarget.Name);
+            this.radiation = radiation;
+            this.attraction = attraction;
+            Target = target;
+            target.AtomNameChanged += Force_AtomNameChanged;
         }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Force"/> with defined name and force value. 
-        /// </summary>
-        /// <param name="atomTarget">The Atom target.</param>
-        /// <param name="value">The force value. (Range [-1.0, 1.0] inclusive)</param>
-        public Force(Atom atomTarget, double value) : this(atomTarget) => this.value = value;
         #endregion
 
         #region Force
-        /// <summary>
-        /// Reset random force value. (Range [-1.0, 1.0] inclusive)
-        /// </summary>
-        public void ResetRandomForce() => Value = (Random.Shared.NextDoubleInclusive() * (MAXVALUE - MINVALUE)) + MINVALUE;
+        private void Force_AtomNameChanged(object? sender, EventArgs e)
+        {
+            ForceNameChanged?.Invoke(this, new());
+        }
         #endregion
 
         #region Finalize
         public void Dispose()
         {
+            Target.AtomNameChanged -= Force_AtomNameChanged;
+
             ForceNameChanged = null;
-            ForceValueChanged = null;
-            AtomTarget = null;
-            //GC.SuppressFinalize(this);
+            ForceRadiationChanged = null;
+            ForceAttractionChanged = null;
+
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
